@@ -1,16 +1,16 @@
-/*****************************
-    	Yunus YILDIRIM
-*/////////////////////////////
-
 #include <stdio.h>
 #include <math.h>
 
+/** Notre structure définissant une image
+ * Elle contient le nombre de lignes, colonnes, valeur maximale de gris et une matrice
+ * */
 typedef struct{
     char version[2];
     int width, height, grayLevel;
     int **pixel;
 } IMAGE;
 
+// allouer de la mémoire pour la matrice
 int **memoryAllocate(int w, int h){
     int **tmp, i;
 
@@ -21,6 +21,7 @@ int **memoryAllocate(int w, int h){
     return tmp;
 }
 
+// libérer la mémoire
 void freeMemory(int row, int **matrix){
     int i;
 
@@ -29,7 +30,8 @@ void freeMemory(int row, int **matrix){
 	free(matrix);
 }
 
-void resimOku(char *filename, IMAGE *img){
+//lecture du fichier
+void readFile(char *filename, IMAGE *img){
     int i,j;
     FILE *file;
 
@@ -57,7 +59,7 @@ void resimOku(char *filename, IMAGE *img){
     printf("[*]End of File Reading.!\n");
 }
 
-void resmeYaz(char *filename, IMAGE *img){
+void writeFile(char *filename, IMAGE *img){
     FILE *f;
     int i, j;
 
@@ -80,7 +82,7 @@ void resmeYaz(char *filename, IMAGE *img){
     fclose(f);
     printf("[*]End of File Writing.\n");
 }
-
+// Plus d'infos : https://en.wikipedia.org/wiki/Sobel_operator 
 void sobelFiltering(IMAGE *img){
 
     int **newPixel;
@@ -135,10 +137,11 @@ void sobelFiltering(IMAGE *img){
         }
     //freeMemory(img->width,&newPixel);
 
-    resmeYaz("sonuc.sobel.pgm",img);
+    writeFile("filtreSobel.pgm",img);
     printf("\n[*]End of Sobel.!");
 }
 
+// répartition des niveaux de gris
 void histogramEqu(IMAGE *img, int grayLevel){
 
     int histogram[256] = {0};
@@ -169,7 +172,7 @@ void histogramEqu(IMAGE *img, int grayLevel){
         for (j=1; j<img->height; j++)
             img->pixel[i][j] = histogram[img->pixel[i][j]];
 
-    resmeYaz("sonuc.histogram.pgm",img);
+    writeFile("histogram.pgm",img);
     printf("\n[*]End of Histogram Equalization.!\n");
 }
 
@@ -182,7 +185,7 @@ int main()
     printf("Enter the filename : ");
     scanf("%s",&filename);
 
-    resimOku(&filename,&image);
+    readFile(&filename,&image);
     sobelFiltering(&image);
 
     printf("\n\nEnter new gray level : ");
