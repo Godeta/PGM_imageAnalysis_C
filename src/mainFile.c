@@ -1,5 +1,7 @@
-// petit tuto intéressant sur le traitement d'images en C
-//  https://batchloaf.wordpress.com/2011/11/21/pgm-image-processing-example/
+/** Fichier principal du programme
+ * 
+ * 
+ * */
 #include "mainFile.h"
 
 int main() {
