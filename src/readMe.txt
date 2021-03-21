@@ -1,2 +1,1 @@
-Ici, toute la partie code en C
-
+Ici, toute la partie code du programme pour traiter des images .pgm en C

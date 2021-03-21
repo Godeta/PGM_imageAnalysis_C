@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 
 /** Notre structure définissant une image
@@ -192,7 +193,7 @@ int main()
     scanf("%d",&grayLevel);
 
     histogramEqu(&image,grayLevel);
-    getch();
+    scanf('%s',NULL);
 
     return 0;
 }
