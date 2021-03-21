@@ -1,1 +1,1 @@
-Toute la documentation du projet
+Dans ce dossier se trouve toute la documentation du projet
