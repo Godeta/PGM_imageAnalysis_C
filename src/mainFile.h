@@ -9,6 +9,14 @@ enum { false, true };
 //pour faire un test de calcul de temps en C
 void testCalcTime();
 
+
+// matrice de pixels, 1000 lignes et 1000 colonnes
+int p[1000][1000];
+int p2[1000][1000];
+int comp[1000][1000];
+// largeur et hauteur initialisées dans la récupération de l'image
+int maxWidth, maxHeight;
+
 //tests qui permettent de vérifier pour un anneau qu'il peut être conforme
 int findCircle();
 bool mandatoryTests(int i, int j);

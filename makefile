@@ -68,7 +68,7 @@ default:
 
 # efface les fichiers compilés
 clean:
-	$(CLEANUP) $(TARGET1) $(TARGET2)
+	$(CLEANUP) $(TARGET1) $(TARGET2) truc.pgm resultats.csv
 
 ci: CFLAGS += -Werror
 ci: default

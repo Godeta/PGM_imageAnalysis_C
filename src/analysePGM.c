@@ -1,10 +1,4 @@
 #include "mainFile.h"
-// matrice de pixels, 1000 lignes et 1000 colonnes
-int p[1000][1000];
-int p2[1000][1000];
-int comp[1000][1000];
-// largeur et hauteur initialisées dans la récupération de l'image
-int maxWidth, maxHeight;
 
 /**
  * Un exemple de calcul de temps en C avec le calcul du temps réel passé et 
@@ -83,7 +77,7 @@ bool mandatoryTests(int i, int j) {
         }
     }
 
-    printf("\nL'anneau semble conforme !\n");
+    // printf("L'anneau semble conforme !\n");
     return true;
 }
 
