@@ -27,6 +27,7 @@ void testCalcTime() {
  * Retourne -1 si aucun anneau trouvé, 0 si un anneau est trouvé
  */ 
 int findCircle() {
+    int nbAnneauxTraites =0;
     for (int i=0; i<maxHeight; i++) {
         for(int j=0; j<maxWidth; j++) {
             //si le pixel est noir
@@ -40,10 +41,14 @@ int findCircle() {
                 else {
                     printf("L'anneau n'est pas conforme selon la comparaison d'images !\n");
                 }
+                nbAnneauxTraites+=1;
                 // printf("\nComparaison %d\n",diff);
-                return 0;
             }
         }
+    }
+    if(nbAnneauxTraites>0) {
+        printf("    Nombre d'anneaux identifiés : %d",nbAnneauxTraites );
+        return 0;
     }
     printf("Pas d'anneau trouvé sur l'image !\n");
     return -1;
@@ -99,11 +104,17 @@ int comparerImages(int img [1000][1000], int img2 [1000][1000]) {
     return diff;
 }
 
+/**
+ * On coupe un carré de 65*65 pixels de l'image pour le mettre dans p2 
+ * et comparer ensuite l'image de l'anneau avec une image modèle d'un anneau conforme
+ */ 
 void cutCircle(int i, int j) {
     //on prend un carré de 65*65
                 for(int x=0; x<65;x++){
                     for(int y=0; y<65;y++){
                         p2[x][y] = p[i+x][j+y];
+                        // on met le pixel blanc car on a traité l'anneau et ainsi on ne repassera pas dessus
+                        p[i+x][j+y] = 255;
                     }
                 }
 }
