@@ -41,9 +41,9 @@ SRC_FILES1=\
   $(UNITY_ROOT)/unity_fixture.c \
   src/analysePGM.c \
   src/pgmImageProcessing.c \
-  test/TestanalysePGM.c \
+  test/TestAnalysePGM.c \
   test/TestPgmImageProcessing.c \
-  test/test_runners/TestanalysePGM_Runner.c \
+  test/test_runners/TestAnalysePGM_Runner.c \
   test/test_runners/TestPgm_Runner.c \
   test/test_runners/all_tests.c
 # les fichiers nécessaires pour compiler le programme
