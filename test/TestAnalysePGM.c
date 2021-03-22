@@ -16,5 +16,5 @@ TEST_TEAR_DOWN(analysePGM)
 TEST(analysePGM, findCircle)
 {
   //All of these should pass
-  TEST_ASSERT_EQUAL(0, findCircle());
+  TEST_ASSERT_EQUAL(-1, findCircle());
 }

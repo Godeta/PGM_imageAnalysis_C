@@ -32,8 +32,9 @@ int findCircle() {
         for(int j=0; j<maxWidth; j++) {
             //si le pixel est noir
             if(p[i][j]<60) {
-                mandatoryTests(i,j);
+                bool correct = mandatoryTests(i,j);
                 cutCircle(i,j-32);
+                if(correct == true) {
                 int diff = comparerImages(p2,comp);
                 if(diff <20000) {
                     printf("L'anneau est conforme selon la comparaison d'images !\n");
@@ -42,6 +43,7 @@ int findCircle() {
                     printf("L'anneau n'est pas conforme selon la comparaison d'images !\n");
                 }
                 nbAnneauxTraites+=1;
+                }
                 // printf("\nComparaison %d\n",diff);
             }
         }
@@ -50,7 +52,7 @@ int findCircle() {
         printf("    Nombre d'anneaux identifiés : %d",nbAnneauxTraites );
         return 0;
     }
-    printf("Pas d'anneau trouvé sur l'image !\n");
+    printf("Pas d'anneau conforme trouvé sur l'image !\n");
     return -1;
 }
 

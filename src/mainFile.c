@@ -27,8 +27,15 @@ int main(int argc, char **argv) {
 
     load_image_from_file(filename, p);
     printf(" de taille : %d %d\n", maxWidth, maxHeight);
+    // calcul du temps
+    clock_t t; 
+    time_t begin = time(NULL);
+    t = clock(); 
     findCircle();
-    printf("Fin de l'analyse de l'image\n\n");
+    t = clock() - t; 
+    time_t end = time(NULL);
+    double time_taken = ((double)t)/CLOCKS_PER_SEC;
+    printf(" Fin de l'analyse de l'image, %d secondes passée et %f secondes a executer l'operation \n\n",(end - begin),time_taken);
     // sobelFiltering(p,p2);
     // save_image_to_file("resultat.pgm",p2);
     return 0;
