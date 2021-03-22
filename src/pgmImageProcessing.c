@@ -24,7 +24,7 @@ int maxWidth, maxHeight;
 /*
 int main() {
     // chargement d'une image :
-    load_image_from_file("single_0.pgm");
+    load_image_from_file("single_0.pgm",p);
     // invert_colours();
     // applyConvolutionProcessing('e');
     // rotate(180);
@@ -35,26 +35,26 @@ int main() {
 */
 
 /**
- *  Fonction pour charger une image PGM
+ *  Fonction pour charger une image PGM, initialise au passage les valeurs de maxwidth et maxheight
  * */
-void load_image_from_file(char filename[])
+void load_image_from_file(char filename[], int matrix[1000][1000])
 {
    // Variables
     FILE *f;
     char line[200];
     int x, y;
  
-    printf("Ouverture de l'image %s\n", filename);
+    // printf("Ouverture de l'image %s\n", filename);
     f = fopen(filename, "r");
  
-    printf("Lecture des informations dans l'entete\n");
+    // printf("Lecture des informations dans l'entete\n");
     fscanf(f, "%[^\n]\n", line);
     // fscanf(f, "%[^\n]\n", line);
     fscanf(f, "%d %d\n", &maxWidth, &maxHeight);
     fscanf(f, "%[^\n]\n", line);
  
     // On met chaque pixel dans notre matrice p
-    printf("Lecture de chaque pixels de l'image %s\n", filename);
+    // printf("Lecture de chaque pixels de l'image %s\n", filename);
     y = 0;
     while(y < maxHeight)
     {
@@ -62,21 +62,21 @@ void load_image_from_file(char filename[])
         while(x < maxWidth)
         {
             // fscanf(f, "%d", &p[y][x]);
-            p[y][x] = fgetc(f);
+            matrix[y][x] = fgetc(f);
             x = x + 1;
         }
         y = y + 1;
     }
  
     // Close input file
-    printf("Fermeture du fichier %s\n", filename);
+    // printf("Fermeture du fichier %s\n", filename);
     fclose(f);
 }
  
 /**
  * Enregistrer notre matrice p en une image PGM
  */ 
-void save_image_to_file(char filename[])
+void save_image_to_file(char filename[], int matrix[1000][1000])
 {
     // variables
     FILE *f;
@@ -100,7 +100,7 @@ void save_image_to_file(char filename[])
         x = 0;
         while(x < maxWidth)
         {
-            fprintf(f, "%d ", p[y][x]);
+            fprintf(f, "%d ", matrix[y][x]);
             x = x + 1;
         }
         fprintf(f, "\n");
@@ -115,7 +115,7 @@ void save_image_to_file(char filename[])
  * Inversion très simple des couleurs, on donne simplement pour chaque pixels la valeur 255 - valeur originale
  * donc si il était noir 255-0 devient blanc et si il était blanc 255-255 =0 donc noir
  */
-void invert_colours()
+void invert_colours(int matrix[1000][1000])
 {
     // variables
     int x, y;
@@ -127,7 +127,7 @@ void invert_colours()
         x = 1;
         while(x < maxWidth)
         {
-            p[y][x] = 255 - p[y][x];
+            matrix[y][x] = 255 - matrix[y][x];
             x = x + 1;
         }
         y = y + 1;
@@ -174,7 +174,7 @@ int conMatrixMult(int theImageArray[1000][1000], int myMatrix[3][3], int i, int 
  * -> 's' pour sharpen
  * -> 'g' pour flou gaussien
  */
-void applyConvolutionProcessing(char effet) {
+void applyConvolutionProcessing(char effet, int matrix[1000][1000]) {
     // Parcours de la matrice p
     int x, y;
 
@@ -187,19 +187,19 @@ void applyConvolutionProcessing(char effet) {
         {
             // les effets à appliquer sur les pixels selon notre choix
             if(effet == 'e') {
-                p[y][x] = conMatrixMult(p,edgeDetect,y,x,20,-20);
+                matrix[y][x] = conMatrixMult(matrix,edgeDetect,y,x,20,-20);
             }
             else if (effet == 's') {
-                p[y][x] = conMatrixMult(p,sharpen,y,x,8,-50);
+                matrix[y][x] = conMatrixMult(matrix,sharpen,y,x,8,-50);
             }
             else if (effet == 'g') {
-                p[y][x] = conMatrixMult(p,gaussian,y,x,16,0);
+                matrix[y][x] = conMatrixMult(matrix,gaussian,y,x,16,0);
             }
             else {
                 printf("\nCe charactère n'est pas pris en compte par la fonction applyConvolutionProcessing !");
                 return ;
             }
-            p[y][x] = 255 - p[y][x];
+            matrix[y][x] = 255 - matrix[y][x];
             x = x + 1;
         }
         y = y + 1;
@@ -241,8 +241,9 @@ void rotate(int degree) {
 /**
  * Application du filtre sobel pour la détection des bords
  *  Plus d'infos : https://en.wikipedia.org/wiki/Sobel_operator 
+ * Arguments : la matrice sur laquelle on veut effectuer l'opération et une matrice temporaire
  */
- void sobelFiltering(){
+ void sobelFiltering(int matrix[1000][1000], int temp[1000][1000]){
      printf("\nDebut du filtre sobel");
 
     // approximation de la dérivée horizontale (voir wikipedia la formulation en français)
@@ -262,22 +263,22 @@ void rotate(int degree) {
             // avec les 8 points autour de notre point on calcule le gradient
             for (int x = -1; x <= 1; x++){
                  for (int y = -1; y <= 1; y++){
-                    valX += p[i+x][j+y] * sobel_x[1+x][1+y];
-                    valY += p[i+x][j+y] * sobel_y[1+x][1+y];
+                    valX += matrix[i+x][j+y] * sobel_x[1+x][1+y];
+                    valY += matrix[i+x][j+y] * sobel_y[1+x][1+y];
                     }
             }
-            p2[i][j] = (int)( sqrt(valX*valX + valY*valY) );
+            temp[i][j] = (int)( sqrt(valX*valX + valY*valY) );
             // on remet les valeurs entre 0 et 255
-            if (p2[i][j] < 0)
-                p2[i][j] = 0;
-            else if (p2[i][j] > 255)
-                p2[i][j] = 255;
+            if (temp[i][j] < 0)
+                temp[i][j] = 0;
+            else if (temp[i][j] > 255)
+                temp[i][j] = 255;
         }
     }
     // on remet les valeurs de notre matrice temporaire dans notree matrice p
     for (int x=0; x<maxWidth; x++)
         for (int y=0; y<maxHeight; y++){
-            p[x][y] = p2[x][y];
+            matrix[x][y] = temp[x][y];
         }
 
     printf("\nFin de l'application du filtre Sobel !");
