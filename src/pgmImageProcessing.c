@@ -36,8 +36,9 @@ int main() {
 
 /**
  *  Fonction pour charger une image PGM, initialise au passage les valeurs de maxwidth et maxheight
+ * retourne 0 en cas de réussite
  * */
-void load_image_from_file(char filename[], int matrix[1000][1000])
+int load_image_from_file(char filename[], int matrix[1000][1000])
 {
    // Variables
     FILE *f;
@@ -46,6 +47,9 @@ void load_image_from_file(char filename[], int matrix[1000][1000])
  
     // printf("Ouverture de l'image %s\n", filename);
     f = fopen(filename, "r");
+    if(f == NULL) {
+        return -1;
+    }
  
     // printf("Lecture des informations dans l'entete\n");
     fscanf(f, "%[^\n]\n", line);
@@ -71,12 +75,14 @@ void load_image_from_file(char filename[], int matrix[1000][1000])
     // Close input file
     // printf("Fermeture du fichier %s\n", filename);
     fclose(f);
+    return 0;
 }
  
 /**
  * Enregistrer notre matrice p en une image PGM
+ * Retourne 0 en cas de réussite
  */ 
-void save_image_to_file(char filename[], int matrix[1000][1000])
+int save_image_to_file(char filename[], int matrix[1000][1000])
 {
     // variables
     FILE *f;
@@ -84,6 +90,9 @@ void save_image_to_file(char filename[], int matrix[1000][1000])
  
     printf("\nOuverture du fichier pour enregistrer la nouvelle image %s\n", filename);
     f = fopen(filename, "w");
+    if(f == NULL) {
+        return -1;
+    }
  
     printf("Ecriture de l'entête %s\n", filename);
     fprintf(f, "P2\n");
@@ -109,6 +118,7 @@ void save_image_to_file(char filename[], int matrix[1000][1000])
  
     printf("Fermeture du fichier en sortie %s\n", filename);
     fclose(f);
+    return 0;
 }
 
 /**

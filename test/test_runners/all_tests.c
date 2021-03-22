@@ -2,8 +2,8 @@
 
 static void RunAllTests(void)
 {
-  RUN_TEST_GROUP(usefulFunctions);
-  RUN_TEST_GROUP(TCP);
+  RUN_TEST_GROUP(pgmImageProcessing);
+  RUN_TEST_GROUP(mainFile);
 }
 
 int main(int argc, const char * argv[])

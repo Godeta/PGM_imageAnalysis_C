@@ -4,8 +4,8 @@
 // penser à compiler avec l'argument -lm quand on utilise math.h
  
 // Fonctions sur les fichiers d'images
-void load_image_from_file(char[], int matrix[1000][1000]);
-void save_image_to_file(char[],int matrix[1000][1000]);
+int load_image_from_file(char[], int matrix[1000][1000]);
+int save_image_to_file(char[],int matrix[1000][1000]);
  
 // Fonctions de traitement de l'image
 void invert_colours(int matrix[1000][1000]);

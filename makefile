@@ -40,22 +40,19 @@ TARGET2 = analyser
 SRC_FILES1=\
   $(UNITY_ROOT)/unity.c \
   $(UNITY_ROOT)/unity_fixture.c \
-  src/usefulFunctions.c \
-  src/TCP.c \
-  src/UDP.c \
-  test/TestUsefulFunc.c \
-  test/TestTCP.c \
-  test/test_runners/TestUsefulFunc_Runner.c \
-  test/test_runners/TestTCP_Runner.c \
+  src/pgmImageProcessing.c \
+  src/mainFile.c \
+  test/TestPgmImageProcessing.c \
+  test/TestMainFile.c \
+  test/test_runners/TestPgm_Runner.c \
+  test/test_runners/TestMainFile_Runner.c \
   test/test_runners/all_tests.c
 # les fichiers nécessaires pour compiler le programme
 SRC_FILES2=\
   $(UNITY_ROOT)/unity.c \
   $(UNITY_ROOT)/unity_fixture.c \
-  src/usefulFunctions.c \
-  src/TCP.c \
-  src/UDP.c \
-  src/main.c
+  src/pgmImageProcessing.c \
+  src/mainFile.c \
 INC_DIRS=-Isrc -I$(UNITY_ROOT)
 SYMBOLS=-DUNITY_FIXTURE_NO_EXTRAS
 

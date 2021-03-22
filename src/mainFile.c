@@ -18,7 +18,7 @@ int main(int argc, char **argv) {
     // testCalcTime();
     
     // nom du fichier à ouvrir
-    char * filename = "../dataset/conforme1.pgm";
+    char * filename = "../dataset/conforme.pgm";
     //si on n'a pas fourni d'argument en appelant le programme
     if(argc<2) {
         printf("Pas de chemin pour le fichier fourni en argument, utilisation de '../dataset/conforme1.pgm' \n");
@@ -36,8 +36,7 @@ int main(int argc, char **argv) {
     printf(" de taille : %d %d\n", maxWidth, maxHeight);
     findCircle();
     // sobelFiltering(p,p2);
-    // save_image_to_file("resultat.pgm",p);
-    bruteForce();
+    // save_image_to_file("resultat.pgm",p2);
     return 0;
 }
 
@@ -65,18 +64,29 @@ void testCalcTime() {
 
 /**
  * Trouve les anneaux puis execute les tests obligatoires
+ * Retourne -1 si aucun anneau trouvé, 0 si un anneau est trouvé
  */ 
-void findCircle() {
+int findCircle() {
     for (int i=0; i<maxHeight; i++) {
         for(int j=0; j<maxWidth; j++) {
             //si le pixel est noir
             if(p[i][j]<60) {
                 mandatoryTests(i,j);
-                return ;
+                cutCircle(i,j-32);
+                int diff = comparerImages(p2,comp);
+                if(diff <20000) {
+                    printf("L'anneau est conforme selon la comparaison d'images !\n");
+                }
+                else {
+                    printf("L'anneau n'est pas conforme selon la comparaison d'images !\n");
+                }
+                // printf("\nComparaison %d\n",diff);
+                return 0;
             }
         }
     }
     printf("Pas d'anneau trouvé sur l'image !\n");
+    return -1;
 }
 
 /**
@@ -90,7 +100,7 @@ bool mandatoryTests(int i, int j) {
     // for (int a =0; a<10; a++) {
     //     printf("pixel : %d %d val : %d\n",a+320,a+370,p[370+a][320+a]);
     // }
-    printf("Premier pixel noir : %d %d\n", i, j);
+    // printf("Premier pixel noir : %d %d\n", i, j);
     //entre i+0, i+16 et i+49, i+63 pixels noirs
     for(int x =1; x<17; x++) {
         if(p[i+x][j] > 65) {
@@ -117,36 +127,23 @@ bool mandatoryTests(int i, int j) {
  */
 int comparerImages(int img [1000][1000], int img2 [1000][1000]) {
     int diff = 0;
-    for (int i =0; i<maxWidth; i++) {
-        for (int j=0; j<maxHeight; j++) {
-            diff+= abs(img[i][j] - img2[i][j]);
+    for (int i =0; i<65; i++) {
+        for (int j=0; j<65; j++) {
+            int val = abs(img[i][j] - img2[i][j]);
+            if(val <65) {
+                val =0;
+            }
+            diff+= val;
         }
     }
     return diff;
 }
 
-/**
- * Brute force, on effectue la comparaison d'image de 65*65 pixels sur chaque portions de l'image d'origine
- */
-void bruteForce() {
-    int min =100000;
-    //pour chaque pixels de l'image
-    for (int i =0; i<maxWidth; i++) {
-        for (int j=0; j<maxHeight; j++) {
-            if(i<maxWidth-65 && j<maxHeight-65){
-                //on prend un carré de 65*65
+void cutCircle(int i, int j) {
+    //on prend un carré de 65*65
                 for(int x=0; x<65;x++){
                     for(int y=0; y<65;y++){
-                    p2[x][y] = p[i+x][j+y];
+                        p2[x][y] = p[i+x][j+y];
                     }
                 }
-                int temp = comparerImages(p2,comp);
-                // printf("val : %d\n",temp);
-                if(min>temp){
-                    min = temp;
-                }
-            }
-        }
-    }
-    printf("\n Minimum : %d\n",min);
-} 
+}

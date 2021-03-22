@@ -10,7 +10,7 @@ enum { false, true };
 void testCalcTime();
 
 //tests qui permettent de vérifier pour un anneau qu'il peut être conforme
-void findCircle();
+int findCircle();
 bool mandatoryTests(int i, int j);
 int comparerImages(int img [1000][1000], int img2 [1000][1000]);
-void bruteForce();
+void cutCircle(int i, int j);
