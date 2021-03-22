@@ -21,8 +21,9 @@ int p2[1000][1000];
 // largeur et hauteur initialisées dans la récupération de l'image
 int maxWidth, maxHeight;
 
+/*
 int main() {
-    // chargement et inversion d'une image :
+    // chargement d'une image :
     load_image_from_file("single_0.pgm");
     // invert_colours();
     // applyConvolutionProcessing('e');
@@ -31,6 +32,7 @@ int main() {
     save_image_to_file("resultat.pgm");
     return 0;
 }
+*/
 
 /**
  *  Fonction pour charger une image PGM
