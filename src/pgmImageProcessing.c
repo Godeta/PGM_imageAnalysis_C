@@ -13,23 +13,13 @@ https://github.com/th3gundy/pgm-image-processing/blob/master/image_processing.c
 -> du code pour ouvrir une image PGM et écrire en sortie une autre avec des niveaux de gris différents, histogramme
 */
 
-#include "mainFile.h"
+#include "pgmImageProcessing.h"
 
 // matrice de pixels, 1000 lignes et 1000 colonnes
 int p[1000][1000];
 int p2[1000][1000];
 // largeur et hauteur initialisées dans la récupération de l'image
 int maxWidth, maxHeight;
- 
-// Fonctions sur les fichiers d'images
-void load_image_from_file(char[]);
-void save_image_to_file(char[]);
- 
-// Fonctions de traitement de l'image
-void invert_colours();
-int conMatrixMult(int theImageArray[1000][1000], int myMatrix[3][3], int i, int j, int divisor, int subtractor);
-void applyConvolutionProcessing(char effet);
-void rotate(int degree);
 
 int main() {
     // chargement et inversion d'une image :
@@ -37,12 +27,13 @@ int main() {
     // invert_colours();
     // applyConvolutionProcessing('e');
     // rotate(180);
+    sobelFiltering();
     save_image_to_file("resultat.pgm");
     return 0;
 }
 
-/** Fonction pour charger une image PGM
- * 
+/**
+ *  Fonction pour charger une image PGM
  * */
 void load_image_from_file(char filename[])
 {
@@ -80,13 +71,16 @@ void load_image_from_file(char filename[])
     fclose(f);
 }
  
+/**
+ * Enregistrer notre matrice p en une image PGM
+ */ 
 void save_image_to_file(char filename[])
 {
     // variables
     FILE *f;
     int x, y;
  
-    printf("Ouverture du fichier pour enregistrer la nouvelle image %s\n", filename);
+    printf("\nOuverture du fichier pour enregistrer la nouvelle image %s\n", filename);
     f = fopen(filename, "w");
  
     printf("Ecriture de l'entête %s\n", filename);
@@ -191,7 +185,7 @@ void applyConvolutionProcessing(char effet) {
         {
             // les effets à appliquer sur les pixels selon notre choix
             if(effet == 'e') {
-                p[y][x] = conMatrixMult(p,edgeDetect,y,x,15,0);
+                p[y][x] = conMatrixMult(p,edgeDetect,y,x,20,-20);
             }
             else if (effet == 's') {
                 p[y][x] = conMatrixMult(p,sharpen,y,x,8,-50);
@@ -240,4 +234,49 @@ void rotate(int degree) {
             p [i][j] = p2[i][j];
         }
     }
+}
+
+/**
+ * Application du filtre sobel pour la détection des bords
+ *  Plus d'infos : https://en.wikipedia.org/wiki/Sobel_operator 
+ */
+ void sobelFiltering(){
+     printf("\nDebut du filtre sobel");
+
+    // approximation de la dérivée horizontale (voir wikipedia la formulation en français)
+    int sobel_x[3][3] = { { -1,   0,  1},
+                          { -2,   0,  2},
+                          { -1,   0,  1}};
+    // approximation de la dérivée verticale
+    int sobel_y[3][3] = { {-1,  -2,  -1},
+                          { 0,   0,   0},
+                          { 1,   2,   1}};
+    int valX=0,valY=0;
+
+    // parcours de toute la matrice sur lequel on applique le filtre sobel sur chaque pixels et que l'on écris dans p2
+    for (int i=1; i<maxWidth-1; i++){
+        for (int j=1; j<maxHeight-1; j++){
+            valX=0; valY=0;
+            // avec les 8 points autour de notre point on calcule le gradient
+            for (int x = -1; x <= 1; x++){
+                 for (int y = -1; y <= 1; y++){
+                    valX += p[i+x][j+y] * sobel_x[1+x][1+y];
+                    valY += p[i+x][j+y] * sobel_y[1+x][1+y];
+                    }
+            }
+            p2[i][j] = (int)( sqrt(valX*valX + valY*valY) );
+            // on remet les valeurs entre 0 et 255
+            if (p2[i][j] < 0)
+                p2[i][j] = 0;
+            else if (p2[i][j] > 255)
+                p2[i][j] = 255;
+        }
+    }
+    // on remet les valeurs de notre matrice temporaire dans notree matrice p
+    for (int x=0; x<maxWidth; x++)
+        for (int y=0; y<maxHeight; y++){
+            p[x][y] = p2[x][y];
+        }
+
+    printf("\nFin de l'application du filtre Sobel !");
 }
