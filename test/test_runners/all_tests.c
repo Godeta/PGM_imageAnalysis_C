@@ -3,7 +3,7 @@
 static void RunAllTests(void)
 {
   RUN_TEST_GROUP(pgmImageProcessing);
-  RUN_TEST_GROUP(mainFile);
+  RUN_TEST_GROUP(analysePGM);
 }
 
 int main(int argc, const char * argv[])

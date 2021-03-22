@@ -28,7 +28,6 @@ UNITY_ROOT=./lib
 
 # Pour voir précisément les erreurs et avertissements
 CFLAGS=-std=c99
-CFLAGS += -Wall
 CFLAGS += -Wextra
 #CFLAGS += -Wno-misleading-indentation
 
@@ -40,12 +39,12 @@ TARGET2 = analyser
 SRC_FILES1=\
   $(UNITY_ROOT)/unity.c \
   $(UNITY_ROOT)/unity_fixture.c \
+  src/analysePGM.c \
   src/pgmImageProcessing.c \
-  src/mainFile.c \
+  test/TestanalysePGM.c \
   test/TestPgmImageProcessing.c \
-  test/TestMainFile.c \
+  test/test_runners/TestanalysePGM_Runner.c \
   test/test_runners/TestPgm_Runner.c \
-  test/test_runners/TestMainFile_Runner.c \
   test/test_runners/all_tests.c
 # les fichiers nécessaires pour compiler le programme
 SRC_FILES2=\
@@ -53,6 +52,8 @@ SRC_FILES2=\
   $(UNITY_ROOT)/unity_fixture.c \
   src/pgmImageProcessing.c \
   src/mainFile.c \
+  src/analysePGM.c \
+  
 INC_DIRS=-Isrc -I$(UNITY_ROOT)
 SYMBOLS=-DUNITY_FIXTURE_NO_EXTRAS
 
@@ -61,17 +62,13 @@ all: clean default
 
 # compile les tests -> les effectue puis compile le programme
 default:
-	$(C_COMPILER) $(CFLAGS) $(INC_DIRS) $(SYMBOLS) $(SRC_FILES1) -o $(TARGET1)
+	$(C_COMPILER) $(CFLAGS) $(INC_DIRS) $(SYMBOLS) $(SRC_FILES1) -o $(TARGET1) -lm
 	- ./$(TARGET1) -v
-	- $(C_COMPILER) $(CFLAGS) $(INC_DIRS) $(SYMBOLS) $(SRC_FILES2) -o $(TARGET2)
-
-# compile uniquement les tests dans all_tests.out
-tests:
-	$(C_COMPILER) $(CFLAGS) $(INC_DIRS) $(SYMBOLS) $(SRC_FILES1) -o $(TARGET1)
+	- $(C_COMPILER) $(CFLAGS) $(INC_DIRS) $(SYMBOLS) $(SRC_FILES2) -o $(TARGET2) -lm
 
 # efface les fichiers compilés
 clean:
-	$(CLEANUP) $(TARGET1) && $(CLEANUP) $(TARGET2)
+	$(CLEANUP) $(TARGET1) $(TARGET2)
 
 ci: CFLAGS += -Werror
 ci: default
