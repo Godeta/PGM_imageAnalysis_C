@@ -27,32 +27,32 @@ void testCalcTime() {
  * Retourne -1 si aucun anneau trouvé, 0 si un anneau est trouvé
  */ 
 int findCircle() {
-    int nbAnneauxTraites =0;
+    int nbAnneauxConf =0;
     for (int i=0; i<maxHeight; i++) {
         for(int j=0; j<maxWidth; j++) {
             //si le pixel est noir
-            if(p[i][j]<60) {
+            if(p[i][j]==0) {
                 bool correct = mandatoryTests(i,j);
                 cutCircle(i,j-32);
                 if(correct == true) {
                 int diff = comparerImages(p2,comp);
-                if(diff <20000) {
-                    printf("L'anneau est conforme selon la comparaison d'images !\n");
+                if(diff <10) {
+                    // printf("L'anneau est conforme selon la comparaison d'images !");
+                    nbAnneauxConf+=1;
                 }
                 else {
-                    printf("L'anneau n'est pas conforme selon la comparaison d'images !\n");
-                }
-                nbAnneauxTraites+=1;
+                    // printf("L'anneau n'est pas conforme selon la comparaison d'images !");
                 }
                 // printf("\nComparaison %d\n",diff);
+                }
             }
         }
     }
-    if(nbAnneauxTraites>0) {
-        printf("    Nombre d'anneaux identifiés : %d",nbAnneauxTraites );
+    printf(" Nombre d'anneaux conformes : %d ,",nbAnneauxConf );
+    if(nbAnneauxConf>0) {
         return 0;
     }
-    printf("Pas d'anneau conforme trouvé sur l'image !\n");
+    // printf(" Pas d'anneau conforme trouvé sur l'image,");
     return -1;
 }
 
@@ -70,16 +70,19 @@ bool mandatoryTests(int i, int j) {
     // printf("Premier pixel noir : %d %d\n", i, j);
     //entre i+0, i+16 et i+49, i+63 pixels noirs
     for(int x =1; x<17; x++) {
-        if(p[i+x][j] > 65) {
-            printf("Anneau non conforme (d >32), pixel non noir entre 0 et 17 ! Pixel : %d %d Valeur :%d\n",i+x,j,p[i+x][j]);
+        if(p[i+x][j] ==255) {
+            // printf("Anneau non conforme (d >32), pixel non noir entre 0 et 17 ! Pixel : %d %d Valeur :%d\n",i+x,j,p[i+x][j]);
+            printf("Anneau non conforme (d >32) ");
             return false;
         }
-        else if (p[i+x+48][j] > 65) {
-            printf("Anneau non conforme (d <32), pixel non noir entre 49 et 64 ! Pixel : %d %d Valeur :%d\n",i+x+48,j,p[i+x+48][j]);
+        else if (p[i+x+48][j] ==255) {
+            // printf("Anneau non conforme (d <32), pixel non noir entre 49 et 64 ! Pixel : %d %d Valeur :%d\n",i+x+48,j,p[i+x+48][j]);
+            printf("Anneau non conforme (d <32) ");
             return false;  
         }
-        else if (p[i+x+64][j] < 65) {
-            printf("Anneau non conforme (trop large), pixel noir après 64 ! Pixel : %d %d Valeur :%d\n",i+x+48,j,p[i+x+48][j]);
+        else if (p[i+x+64][j] ==0) {
+            // printf("Anneau non conforme (trop large), pixel noir après 64 ! Pixel : %d %d Valeur :%d\n",i+x+48,j,p[i+x+48][j]);
+            printf("Anneau non conforme (trop large) ");
             return false; 
         }
     }
@@ -97,10 +100,9 @@ int comparerImages(int img [1000][1000], int img2 [1000][1000]) {
     for (int i =0; i<65; i++) {
         for (int j=0; j<65; j++) {
             int val = abs(img[i][j] - img2[i][j]);
-            if(val <65) {
-                val =0;
+            if(val!=0){
+                diff+= 1;
             }
-            diff+= val;
         }
     }
     return diff;

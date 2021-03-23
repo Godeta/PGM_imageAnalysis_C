@@ -293,3 +293,20 @@ void rotate(int degree) {
 
     printf("\nFin de l'application du filtre Sobel !");
 }
+
+/**
+ * Seuillage d'images : https://fr.wikipedia.org/wiki/Seuillage_d%27image
+ * On prend une matrice de pixels en paramètre et on transforme tous les pixels inférieurs au seuil en noir et les autres en blanc
+ */
+void threshold(int matrix[1000][1000], int val) {
+    for (int x=0; x<maxWidth; x++){
+        for (int y=0; y<maxHeight; y++){
+            if(matrix[x][y]<val) {
+                matrix[x][y] =0;
+            }
+            else {
+                matrix[x][y] = 255;
+            }
+        }
+    }
+}

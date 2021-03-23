@@ -10,7 +10,7 @@ enum { false, true };
 void testCalcTime();
 
 
-// matrice de pixels, 1000 lignes et 1000 colonnes
+// matrices de pixels, 1000 lignes et 1000 colonnes
 int p[1000][1000];
 int p2[1000][1000];
 int comp[1000][1000];

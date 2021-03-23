@@ -13,3 +13,4 @@ int conMatrixMult(int theImageArray[1000][1000], int myMatrix[3][3], int i, int 
 void applyConvolutionProcessing(char effet, int matrix[1000][1000]);
 void rotate(int degree);
 void sobelFiltering(int matrix[1000][1000], int temp[1000][1000]);
+void threshold(int matrix[1000][1000], int val);
