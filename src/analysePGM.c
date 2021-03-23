@@ -113,12 +113,22 @@ int comparerImages(int img [1000][1000], int img2 [1000][1000]) {
  * et comparer ensuite l'image de l'anneau avec une image modèle d'un anneau conforme
  */ 
 void cutCircle(int i, int j) {
+    int centreX = i +32, centreY = j+32, diametre=64; 
     //on prend un carré de 65*65
                 for(int x=0; x<65;x++){
                     for(int y=0; y<65;y++){
-                        p2[x][y] = p[i+x][j+y];
-                        // on met le pixel blanc car on a traité l'anneau et ainsi on ne repassera pas dessus
-                        p[i+x][j+y] = 255;
+                        int disX = centreX-(i+x);
+                        int disY = centreY-(j+y);
+                        //si on est dans le cercle de centre : centreX,centreY et de diametre 64
+                        if(sqrt(disX*disX + disY*disY)<diametre/2+1) {
+                            p2[x][y] = p[i+x][j+y];
+                            // on met le pixel blanc car on a traité l'anneau et ainsi on ne repassera pas dessus
+                            p[i+x][j+y] = 255;
+                        }
+                        else {
+                            p2[x][y] = 255;
+                            // p[i+x][j+y] = 100; //mettre en gris, pratique pour visualiser ce qui se passe et debugguer
+                        }
                     }
                 }
 }

@@ -36,5 +36,6 @@ int main(int argc, char **argv) {
     printf("%.2f\n",rounded_up);
     // sobelFiltering(p,p2);
     // save_image_to_file("resultat.pgm",p2);
+    // save_image_to_file("resultat2.pgm",p);
     return 0;
 }
